@@ -26,6 +26,14 @@ export const signInWithGoogle = ()=>
 {
 signInWithPopup(auth, provier).then((result) => {
 console.log(result);
+
+const name = result.user.displayName;
+const email = result.user.email;
+const profilepic = result.user.photoURL;
+
+localStorage.setItem("name", name)
+localStorage.setItem("email", email)
+localStorage.setItem("profilepic", profilepic)
 }).catch((error) =>
 {
 console.log(error);
