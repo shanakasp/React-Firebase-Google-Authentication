@@ -1,41 +1,43 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import {GoogleAuthProvider, getAuth, signInWithGoogle, signInWithPopup} from 'firebase/auth'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as firebaseSignOut } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBeRh7B3LjTbVj3hDUiIBOW7QEBxXlktAg",
-  authDomain: "auth-7eaee.firebaseapp.com",
-  projectId: "auth-7eaee",
-  storageBucket: "auth-7eaee.appspot.com",
-  messagingSenderId: "1057708975899",
-  appId: "1:1057708975899:web:729c58d7649d7e88c815be",
-  measurementId: "G-NZSBVDSRX9"
+  apiKey: "AIzaSyANfoLDGZsVAl8NwHJUlgLrUynJJMaSsg0",
+  authDomain: "auth-8b1ef.firebaseapp.com",
+  projectId: "auth-8b1ef",
+  storageBucket: "auth-8b1ef.appspot.com",
+  messagingSenderId: "445273762769",
+  appId: "1:445273762769:web:81f403cae7cb5fe3760ef0",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-const provier = new GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: "select_account" }); // This will show a list of accounts to choose from when signing in
 
-export const signInWithGoogle = ()=>
-{
-signInWithPopup(auth, provier).then((result) => {
-console.log(result);
+export const signInWithGoogle = () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const name = result.user.displayName;
+      const email = result.user.email;
+      const profilePic = result.user.photoURL;
 
-const name = result.user.displayName;
-const email = result.user.email;
-const profilepic = result.user.photoURL;
+      localStorage.setItem("name", name);
+      localStorage.setItem("email", email);
+      localStorage.setItem("profilePic", profilePic);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
-localStorage.setItem("name", name)
-localStorage.setItem("email", email)
-localStorage.setItem("profilepic", profilepic)
-}).catch((error) =>
-{
-console.log(error);
-})
+export const signOut = () => {
+  firebaseSignOut(auth)
+    .then(() => {
+      // Sign-out successful.
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
